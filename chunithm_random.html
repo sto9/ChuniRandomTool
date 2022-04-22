@@ -13,7 +13,7 @@
 
         // 前と同じ ID なら呼ばない
         async function callApi() {
-            if (user_id !== "" && user_id === document.getElementById('user_id').value) return false;
+            if (user_id !== "" && user_id === document.getElementById('user_id').value) return true;
             if (document.getElementById('user_id').value === "") {
                 document.getElementById('user_id_error').innerHTML = "<b>ユーザー ID を入力してください。</b>";
                 return false;
