@@ -29,7 +29,7 @@ header {
   z-index: 11;
 }
 
-footer {
+.footer {
   padding-left: 60px;
   padding-right: 60px;
 }
