@@ -1,7 +1,25 @@
+@charset "utf-8";
+
 .row {
   margin-bottom: 10px;
 }
 
 .form-check {
   margin-left: 0px;
+}
+
+header {
+  padding-left: 60px;
+  padding-top: 6px;
+  background: black;
+  height: 50px;
+  position: fixed;
+  top:0;
+  left:0;
+  align-items: center;
+  white-space: nowrap;
+}
+
+body{
+  padding-top: 80px;
 }

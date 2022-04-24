@@ -3,10 +3,33 @@ let records;
 let records_all; // 未プレイを含む
 let musics_all;
 
-async function getAllMusicsData() {
+async function loadAllMusicsData() {
     const URL = "https://api.chunirec.net/2.0/music/showall.json?region=jp2&token=0cc61074c6f6ccf038b3c62be917be3ef317458be49bd3cd68c78a80b4d024b144db12e7f941a8c043f3ac8b4b0c610740e8960baf53f5469de414d6588fa6b5";
     const res = await fetch(URL);
     musics_all = await res.json();
+}
+
+// クッキーを読み込み、設定を反映
+function loadCookie() {
+    for (let target of ['user_id', 'level_lower', 'level_upper', 'display_number']) {
+        let cookie;
+        if (cookie = Cookies.get(target))
+            document.getElementById(target).value = cookie;
+    }
+    for (let target of ['ultima', 'genre_pa', 'genre_nico', 'genre_toho', 'genre_var', 'genre_iro', 'genre_geki', 'genre_ori', 'radio_AJC', 'radio_99AJ', 'radio_AJ', 'exclude_unplayed']) {
+        let cookie;
+        if (cookie = Cookies.get(target))
+            document.getElementById(target).checked = (cookie === 'on');
+    }
+}
+// 設定を保存
+function saveCookie() {
+    for (let target of ['user_id', 'level_lower', 'level_upper', 'display_number']) {
+        Cookies.set(target, document.getElementById(target).value);
+    }
+    for (let target of ['ultima', 'genre_pa', 'genre_nico', 'genre_toho', 'genre_var', 'genre_iro', 'genre_geki', 'genre_ori', 'radio_AJC', 'radio_99AJ', 'radio_AJ', 'exclude_unplayed']) {
+        Cookies.set(target, (document.getElementById(target).checked ? 'on' : 'off'));
+    }
 }
 
 // 前と同じ ID なら呼ばない
@@ -159,6 +182,7 @@ function setTable() {
 async function OnButtonClick() {
     if (!(await callApi())) return;
     setTable();
+    saveCookie()
 }
 
 // 譜面保管所からデータを検索
