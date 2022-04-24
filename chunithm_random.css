@@ -2,6 +2,7 @@
 
 .row {
   margin-bottom: 10px;
+  padding-bottom: 5px;
 }
 
 .form-check {
@@ -10,16 +11,29 @@
 
 header {
   padding-left: 60px;
-  padding-top: 6px;
+  padding-top: 10px;
   background: black;
   height: 50px;
   position: fixed;
-  top:0;
-  left:0;
+  top: 0;
+  left: 0;
   align-items: center;
   white-space: nowrap;
+  z-index: 10;
 }
 
-body{
+.header-logo {
+  float: left;
+  line-height: 50px;
+  vertical-align: auto;
+  z-index: 11;
+}
+
+footer {
+  padding-left: 60px;
+  padding-right: 60px;
+}
+
+body {
   padding-top: 80px;
 }

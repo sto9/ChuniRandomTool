@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta charset="utf-8">
 
-    <title>CHUNITHM Random Selector for Experts</title>
+    <title>chunifil</title>
 
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="./chunithm_random.css" rel="stylesheet" type="text/css">
@@ -14,158 +14,196 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
 
     <script>loadAllMusicsData();</script>
 </head>
 
 <body>
-    <header class="container-fluid">
+    <header class="container-fluid" style="padding-top:0">
         <div class="row">
             <div class="col-12" style="color:white;">
-                <h2>CHUNITHM Random Selector for Experts</h2>
+                <h1>
+                    <font face="Verdana">
+                        <b class="header-logo">chun</b>
+                        <b class="header-logo" style="letter-spacing:0.05em;">ifil</b>
+                    </font>
+                </h1>
             </div>
         </div>
     </header>
 
-    <footer class="container-fluid" style="padding-left:60px;">
+    <footer class="container-fluid">
         <!-- ユーザーID -->
         <div class="row g-2">
-            <div class="col-md-3">
+            <div class="col-auto">
                 <label class="form-label" for="user_id"> chunirec のユーザー ID </label>
-                <input type="text" class="form-control" id="user_id" minlength="1" maxlength="20"
+                <input type="text" class="form-control" id="user_id" minlength="1" maxlength="30"
                     placeholder="例: chunithm">
             </div>
-            <div class="col-md-6">
+            <div class="col-auto">
                 <p id="user_id_error" style="color:red;"></p>
             </div>
         </div>
 
-        <!-- レベル指定 -->
-        <div class="row">
-            <div class="form-group col-md-auto">
-                <label for="level_lower"> 以上 </label>
-                <select id="level_lower" class="form-select">
-                    <option value="10" selected>10</option>
-                    <option value="10.5">10+</option>
-                    <option value="11">11</option>
-                    <option value="11.5">11+</option>
-                    <option value="12">12</option>
-                    <option value="12.5">12+</option>
-                    <option value="13">13</option>
-                    <option value="13.5">13+</option>
-                    <option value="14">14</option>
-                    <option value="14.5">14+</option>
-                    <option value="15">15</option>
-                </select>
-            </div>
-            <div class="form-group col-md-auto">
-                <label for="level_upper"> 以下</label>
-                <select id="level_upper" class="form-select">
-                    <option value="10">10</option>
-                    <option value="10.5">10+</option>
-                    <option value="11">11</option>
-                    <option value="11.5">11+</option>
-                    <option value="12">12</option>
-                    <option value="12.5">12+</option>
-                    <option value="13">13</option>
-                    <option value="13.5">13+</option>
-                    <option value="14">14</option>
-                    <option value="14.5">14+</option>
-                    <option value="15" selected>15</option>
-                </select>
-            </div>
-            <div class="form-check parent col-md-auto">
-                <input type="checkbox" id="ultima" checked class="form-check-input child">
-                <label class="form-check-label child" style="height:36px" for="ultima">ULTIMA を含む </label>
+        <div class="accordion" id="accordionExample" style="margin-bottom:8px;">
+            <div class="accordion-item">
+                <h2 class="accordion-header" id="headingThree">
+                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse"
+                        data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        <b>選曲設定</b>（押すと開きます）
+                    </button>
+                </h2>
+                <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree"
+                    data-bs-parent="#accordionExample">
+                    <div class="accordion-body" style="padding-bottom:8px">
+                        <!-- アコーディオンここから -->
+
+                        <!-- レベル指定 -->
+                        <div class="row" style="display:table; margin-bottom:0">
+                            <div class="form-group col-auto" style="display:table-cell">
+                                <label for="level_lower"> 以上 </label>
+                                <select id="level_lower" class="form-select">
+                                    <option value="10" selected>10</option>
+                                    <option value="10.5">10+</option>
+                                    <option value="11">11</option>
+                                    <option value="11.5">11+</option>
+                                    <option value="12">12</option>
+                                    <option value="12.5">12+</option>
+                                    <option value="13">13</option>
+                                    <option value="13.5">13+</option>
+                                    <option value="14">14</option>
+                                    <option value="14.5">14+</option>
+                                    <option value="15">15</option>
+                                </select>
+                            </div>
+                            <div class="form-group col-auto" style="display:table-cell">
+                                <label for="level_upper"> 以下</label>
+                                <select id="level_upper" class="form-select">
+                                    <option value="10">10</option>
+                                    <option value="10.5">10+</option>
+                                    <option value="11">11</option>
+                                    <option value="11.5">11+</option>
+                                    <option value="12">12</option>
+                                    <option value="12.5">12+</option>
+                                    <option value="13">13</option>
+                                    <option value="13.5">13+</option>
+                                    <option value="14">14</option>
+                                    <option value="14.5">14+</option>
+                                    <option value="15" selected>15</option>
+                                </select>
+                            </div>
+                            <div class="form-check parent col-auto"
+                                style="height:10px; margin-left:12px; vertical-align:bottom; display:table-cell">
+                                <input type="checkbox" id="ultima" checked class="form-check-input child">
+                                <label class="form-check-label child" for="ultima">ULTIMA を含む </label>
+                            </div>
+                        </div>
+                        <div class="row border-bottom">
+                            <div class="col-auto"></div>
+                        </div>
+
+                        <!-- ジャンル指定 -->
+                        <div class="row border-bottom" style="padding-left:12px;">
+                            <div class="form-check form-check-inline col-auto">
+                                <input class="form-check-input" type="checkbox" id="genre_pa" checked>
+                                <label class="form-check-label" for="genre_POPS&ANIME">POPS&ANIME</label>
+                            </div>
+                            <div class="form-check form-check-inline col-auto">
+                                <input class="form-check-input" type="checkbox" id="genre_nico" checked>
+                                <label class="form-check-label" for="genre_niconico">niconico</label>
+                            </div>
+                            <div class="form-check form-check-inline col-auto">
+                                <input class="form-check-input" type="checkbox" id="genre_toho" checked>
+                                <label class="form-check-label" for="genre_toho">東方Project</label>
+                            </div>
+                            <div class="form-check form-check-inline col-auto">
+                                <input class="form-check-input" type="checkbox" id="genre_var" checked>
+                                <label class="form-check-label" for="genre_var">VARIETY</label>
+                            </div>
+                            <div class="form-check form-check-inline col-auto">
+                                <input class="form-check-input" type="checkbox" id="genre_iro" checked>
+                                <label class="form-check-label" for="genre_iro">イロドリミドリ</label>
+                            </div>
+                            <div class="form-check form-check-inline col-auto">
+                                <input class="form-check-input" type="checkbox" id="genre_geki" checked>
+                                <label class="form-check-label" for="genre_geki">ゲキマイ</label>
+                            </div>
+                            <div class="form-check form-check-inline col-auto">
+                                <input class="form-check-input" type="checkbox" id="genre_ori" checked>
+                                <label class="form-check-label" for="genre_ori">ORIGINAL</label>
+                            </div>
+                        </div>
+
+                        <!-- 目標 -->
+                        <div class="row border-bottom" style="padding-left:12px;">
+                            <div class="form-check form-check-inline col-auto">
+                                <input class="form-check-input" type="radio" name="achievement" id="radio_AJC" checked>
+                                <label class="form-check-label" for="radio_AJC">未理論値</label>
+                            </div>
+                            <div class="form-check form-check-inline col-auto">
+                                <input class="form-check-input" type="radio" name="achievement" id="radio_99AJ">
+                                <label class="form-check-label" for="radio_99AJ">未99AJ</label>
+                            </div>
+                            <div class="form-check form-check-inline col-auto">
+                                <input class="form-check-input" type="radio" name="achievement" id="radio_AJ">
+                                <label class="form-check-label" for="radio_AJ">未AJ</label>
+                            </div>
+                            <div class="form-check form-check-inline col-auto">
+                                <input class="form-check-input" type="radio" name="achievement" id="radio_all">
+                                <label class="form-check-label" for="radio_all">全て</label>
+                            </div>
+                        </div>
+
+                        <!-- 除外設定 -->
+                        <div class="row" style="padding-left:12px; margin-bottom:0;">
+                            <div class="form-check form-check-inline col-auto">
+                                <input class="form-check-input" type="checkbox" id="exclude_unplayed" checked>
+                                <label class="form-check-label" for="exclude_unplayed">未プレイ除外</label>
+                            </div>
+                        </div>
+
+                        <!-- アコーディオンここまで -->
+                    </div>
+                </div>
             </div>
         </div>
 
-        <!-- ジャンル指定 -->
-        <div style="margin-bottom:10px">
-            <div class="form-check form-check-inline col-md-auto">
-                <input class="form-check-input" type="checkbox" id="genre_pa" checked>
-                <label class="form-check-label" for="genre_POPS&ANIME">POPS&ANIME</label>
-            </div>
-            <div class="form-check form-check-inline col-md-auto">
-                <input class="form-check-input" type="checkbox" id="genre_nico" checked>
-                <label class="form-check-label" for="genre_niconico">niconico</label>
-            </div>
-            <div class="form-check form-check-inline col-md-auto">
-                <input class="form-check-input" type="checkbox" id="genre_toho" checked>
-                <label class="form-check-label" for="genre_toho">東方Project</label>
-            </div>
-            <div class="form-check form-check-inline col-md-auto">
-                <input class="form-check-input" type="checkbox" id="genre_var" checked>
-                <label class="form-check-label" for="genre_var">VARIETY</label>
-            </div>
-            <div class="form-check form-check-inline col-md-auto">
-                <input class="form-check-input" type="checkbox" id="genre_iro" checked>
-                <label class="form-check-label" for="genre_iro">イロドリミドリ</label>
-            </div>
-            <div class="form-check form-check-inline col-md-auto">
-                <input class="form-check-input" type="checkbox" id="genre_geki" checked>
-                <label class="form-check-label" for="genre_geki">ゲキマイ</label>
-            </div>
-            <div class="form-check form-check-inline col-md-auto">
-                <input class="form-check-input" type="checkbox" id="genre_ori" checked>
-                <label class="form-check-label" for="genre_ori">ORIGINAL</label>
-            </div>
-        </div>
-
-        <!-- 目標 -->
-        <div style="margin-bottom:10px">
-            <div class="form-check form-check-inline col-md-auto">
-                <input class="form-check-input" type="radio" name="achievement" id="radio_AJC" checked>
-                <label class="form-check-label" for="radio_AJC">未理論値</label>
-            </div>
-            <div class="form-check form-check-inline col-md-auto">
-                <input class="form-check-input" type="radio" name="achievement" id="radio_99AJ">
-                <label class="form-check-label" for="radio_99AJ">未99AJ</label>
-            </div>
-            <div class="form-check form-check-inline col-md-auto">
-                <input class="form-check-input" type="radio" name="achievement" id="radio_AJ">
-                <label class="form-check-label" for="radio_AJ">未AJ</label>
-            </div>
-        </div>
-
-        <!-- 除外設定 -->
-        <div style="margin-bottom:10px">
-            <div class="form-check form-check-inline col-md-auto">
-                <input class="form-check-input" type="checkbox" id="exclude_unplayed" checked>
-                <label class="form-check-label" for="exclude_unplayed">未プレイ除外</label>
-            </div>
-        </div>
 
         <!-- 表示曲数 -->
         <div class="row">
-            <div class="form-group col-md-auto">
+            <div class="form-group col-auto">
                 <label for="display_number"> 表示曲数</label>
                 <select id="display_number" class="form-select">
                     <option value="1">1</option>
                     <option value="2">2</option>
                     <option value="3">3</option>
+                    <option value="4">4</option>
                     <option value="5" selected>5</option>
-                    <option value="10">10</option>
+                    <option value="8">8</option>
+                    <option value="12">12</option>
+                    <option value="16">16</option>
                     <option value="20">20</option>
-                    <option value="50">50</option>
                 </select>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-md-3">
+            <div class="col-3">
                 <input type="button" class="btn btn-primary" value="表示" onclick="OnButtonClick();" />
             </div>
         </div>
 
-        <div class="row">
-            <div class="col-md-3">
-                <p id="music_count_sentense"></p>
+        <div class="row" style="margin-bottom:0">
+            <div class="col-12">
+                <font size="5px">
+                    <p id="music_count_sentense"></p>
+                </font>
             </div>
         </div>
 
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-12">
                 <table id="table" class="table table-bordered"></table>
             </div>
         </div>

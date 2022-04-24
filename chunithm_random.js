@@ -16,7 +16,7 @@ function loadCookie() {
         if (cookie = Cookies.get(target))
             document.getElementById(target).value = cookie;
     }
-    for (let target of ['ultima', 'genre_pa', 'genre_nico', 'genre_toho', 'genre_var', 'genre_iro', 'genre_geki', 'genre_ori', 'radio_AJC', 'radio_99AJ', 'radio_AJ', 'exclude_unplayed']) {
+    for (let target of ['ultima', 'genre_pa', 'genre_nico', 'genre_toho', 'genre_var', 'genre_iro', 'genre_geki', 'genre_ori', 'radio_AJC', 'radio_99AJ', 'radio_AJ', 'radio_all', 'exclude_unplayed']) {
         let cookie;
         if (cookie = Cookies.get(target))
             document.getElementById(target).checked = (cookie === 'on');
@@ -25,10 +25,10 @@ function loadCookie() {
 // 設定を保存
 function saveCookie() {
     for (let target of ['user_id', 'level_lower', 'level_upper', 'display_number']) {
-        Cookies.set(target, document.getElementById(target).value);
+        Cookies.set(target, document.getElementById(target).value, { expires: 60 });
     }
-    for (let target of ['ultima', 'genre_pa', 'genre_nico', 'genre_toho', 'genre_var', 'genre_iro', 'genre_geki', 'genre_ori', 'radio_AJC', 'radio_99AJ', 'radio_AJ', 'exclude_unplayed']) {
-        Cookies.set(target, (document.getElementById(target).checked ? 'on' : 'off'));
+    for (let target of ['ultima', 'genre_pa', 'genre_nico', 'genre_toho', 'genre_var', 'genre_iro', 'genre_geki', 'genre_ori', 'radio_AJC', 'radio_99AJ', 'radio_AJ', 'radio_all', 'exclude_unplayed']) {
+        Cookies.set(target, (document.getElementById(target).checked ? 'on' : 'off'), { expires: 60 });
     }
 }
 
@@ -85,7 +85,6 @@ function isValidRecord(record) {
     } else if (document.getElementById('radio_AJ').checked) {
         if (record["is_alljustice"]) return false;
     }
-
     return true;
 }
 
@@ -96,10 +95,10 @@ function addTable(record) {
     let lamp = "-";
     if (record["is_alljustice"]) lamp = "AJ"
     else if (record["is_fullcombo"]) lamp = "FC"
-
+    let humen_url = "https://www.sdvx.in/chunithm/sort/" + level + ".htm";
     let new_HTML = "<tr>";
     new_HTML += "<td>" + record["title"] + "</td>";
-    new_HTML += "<td>" + record["diff"] + " " + level + "</td>";
+    new_HTML += "<td>" + record["diff"] + " " + "<a style=\"text-decoration:none;\" href=\"" + humen_url + "\"> " + level + "</a></td>";
     new_HTML += "<td>" + record["genre"] + "</td>";
     new_HTML += "<td>" + record["score"] + "</td>";
     new_HTML += "<td>" + lamp + "</td>";
@@ -133,11 +132,11 @@ function setAllRecords() {
 function setTable() {
     let table = document.getElementById("table");
     while (table.firstChild) table.removeChild(table.firstChild);
-    let th = '<th scope="col" style="width: 30%%">曲名</th>';
-    th += '<th scope="col" style="width: 13%">難易度</th>';
+    let th = '<th scope="col" style="width: 25%">曲名</th>';
+    th += '<th scope="col" style="width: 15%">難易度</th>';
     th += '<th scope="col" style="width: 15%">ジャンル</th>';
     th += '<th scope="col" style="width: 15%">スコア</th>';
-    th += '<th scope="col" style="width: 7%">ランプ</th>';
+    th += '<th scope="col" style="width: 5%">ランプ</th>';
     table.insertAdjacentHTML('beforeend', th);
 
     let display_number = document.getElementById('display_number').value;
