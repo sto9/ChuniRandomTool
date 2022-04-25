@@ -72,7 +72,8 @@
 
                         <!-- レベル指定 -->
                         <div class="row" style="display:table; margin-bottom:0">
-                            <div class="form-group col-auto" style="display:table-cell">
+
+                            <div id="lower-notconst-block" class="form-group col-auto" style="display:table-cell">
                                 <label for="level_lower"> 以上 </label>
                                 <select id="level_lower" class="form-select">
                                     <option value="10" selected>10</option>
@@ -88,7 +89,7 @@
                                     <option value="15">15</option>
                                 </select>
                             </div>
-                            <div class="form-group col-auto" style="display:table-cell">
+                            <div id="upper-notconst-block" class="form-group col-auto" style="display:table-cell">
                                 <label for="level_upper"> 以下</label>
                                 <select id="level_upper" class="form-select">
                                     <option value="10">10</option>
@@ -104,16 +105,40 @@
                                     <option value="15" selected>15</option>
                                 </select>
                             </div>
+
+
+                            <div id="lower-const-block" class="form-group col-auto d-none" style="display:table-cell">
+                                <label for="level_lower-const"> 以上</label>
+                                <input type="text" class="form-control" id="level_lower_const" minlength="1"
+                                    maxlength="5" value="10.0" placeholder="例: 10.0">
+                            </div>
+                            <div id="upper-const-block" class="form-group col-auto d-none" style="display:table-cell">
+                                <label for="level_upper-const"> 以下</label>
+                                <input type="text" class="form-control" id="level_upper_const" minlength="1"
+                                    maxlength="5" value="15.4" placeholder="例: 15.4">
+                            </div>
+
                             <div class="form-check parent col-auto"
                                 style="height:10px; margin-left:12px; vertical-align:bottom; display:table-cell">
-                                <input type="checkbox" id="ultima" checked class="form-check-input child">
-                                <label class="form-check-label child" for="ultima">ULTIMA 含む </label>
+                                <input type="checkbox" id="select-const" unchecked class="form-check-input child"
+                                    onclick="switchConst();">
+                                <label class="form-check-label child" for="select-const">定数指定 </label>
+                            </div>
+
+                        </div>
+                        <div class="row border-bottom" style="padding-bottom: 0;">
+                            <div class="col-auto h-auto">
+                                <p id="const_error" style="color:red;"></p>
                             </div>
                         </div>
-                        <div class="row border-bottom">
-                            <div class="col-auto"></div>
-                        </div>
 
+                        <!-- ULTIMA -->
+                        <div class="row border-bottom" style="padding-left:12px;">
+                            <div class="form-check col-auto">
+                                <input type="checkbox" id="ultima" checked class="form-check-input child">
+                                <label class="form-check-label child" for="ultima">ULTIMA を含む </label>
+                            </div>
+                        </div>
                         <!-- ジャンル指定 -->
                         <div class="row border-bottom" style="padding-left:12px;">
                             <div class="form-check form-check-inline col-auto">
@@ -209,7 +234,7 @@
 
         <div class="row">
             <div class="col-auto">
-                <input type="button" class="btn btn-primary" value="表示" onclick="OnButtonClick();" />
+                <input type="button" class="btn btn-primary" value="表示" onclick="loadTable();" />
             </div>
             <div class="col-auto">
                 <input type="button" class="btn btn-danger" value="削除" onclick="deleteTable();" />

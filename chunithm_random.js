@@ -7,11 +7,10 @@ async function loadAllMusicsData() {
     const URL = "https://api.chunirec.net/2.0/music/showall.json?region=jp2&token=0cc61074c6f6ccf038b3c62be917be3ef317458be49bd3cd68c78a80b4d024b144db12e7f941a8c043f3ac8b4b0c610740e8960baf53f5469de414d6588fa6b5";
     const res = await fetch(URL);
     musics_all = await res.json();
-
 }
 
-const list_input_value = ['user_id', 'level_lower', 'level_upper', 'display_number'];
-const list_input_checked = ['ultima', 'genre_pa', 'genre_nico', 'genre_toho', 'genre_var', 'genre_iro', 'genre_geki', 'genre_ori', 'radio_AJC', 'radio_99AJ', 'radio_AJ', 'radio_SSS+', 'radio_SSS', 'radio_all', 'exclude_unplayed'];
+const list_input_value = ['user_id', 'level_lower', 'level_upper', 'level_lower_const', 'level_upper_const', 'display_number'];
+const list_input_checked = ['select-const', 'ultima', 'genre_pa', 'genre_nico', 'genre_toho', 'genre_var', 'genre_iro', 'genre_geki', 'genre_ori', 'radio_AJC', 'radio_99AJ', 'radio_AJ', 'radio_SSS+', 'radio_SSS', 'radio_all', 'exclude_unplayed'];
 // クッキーを読み込み、設定を反映
 function loadCookie() {
     for (let target of list_input_value) {
@@ -24,6 +23,12 @@ function loadCookie() {
         if (cookie = Cookies.get(target))
             document.getElementById(target).checked = (cookie === 'on');
     }
+    let disp = ["lower-notconst-block", "upper-notconst-block"];
+    let hide = ["lower-const-block", "upper-const-block"];
+    if (document.getElementById('select-const').checked)
+        [disp, hide] = [hide, disp];
+    for (let target of disp) document.getElementById(target).classList.remove("d-none");
+    for (let target of hide) document.getElementById(target).classList.add("d-none");
 }
 // 設定を保存
 function saveCookie() {
@@ -58,6 +63,18 @@ async function callApi() {
     return true;
 }
 
+function isValidConst() {
+    if (!document.getElementById('select-const').checked) return true;
+    let lower = document.getElementById('level_lower_const').value;
+    let upper = document.getElementById('level_upper_const').value;
+    if (lower !== "" && upper !== "" && !isNaN(lower) && !isNaN(upper)){
+        document.getElementById('const_error').innerHTML = "";
+        return true;
+    }
+    document.getElementById('const_error').innerHTML = "<b>数値を入力してください。</b>";
+    return false;
+}
+
 function genre_to_id(genre) {
     if (genre === "POPS&ANIME") return "genre_pa";
     if (genre === "niconico") return "genre_nico";
@@ -74,8 +91,14 @@ function isValidRecord(record) {
     let ultima = document.getElementById('ultima').checked;
     if (!(record["diff"] === "MAS" || (record["diff"] === "ULT" && ultima))) return false;
     // レベル
-    let lower = document.getElementById('level_lower').value;
-    let upper = document.getElementById('level_upper').value;
+    let lower, upper;
+    if (document.getElementById('select-const').checked) {
+        lower = document.getElementById('level_lower_const').value;
+        upper = document.getElementById('level_upper_const').value;
+    } else {
+        lower = document.getElementById('level_lower').value;
+        upper = document.getElementById('level_upper').value;
+    }
     if (record["level"] < lower || record["level"] > upper) return false;
     // ジャンル
     genre_id = genre_to_id(record["genre"]);
@@ -107,7 +130,11 @@ function addTableAndTweet(record) {
     let humen_url = "https://www.sdvx.in/chunithm/sort/" + level + ".htm";
     let new_HTML = "<tr>";
     new_HTML += '<td>' + record["title"] + "</td>";
-    new_HTML += '<td>' + record["diff"] + " " + "<a style=\"text-decoration:none;\" href=\"" + humen_url + "\"> " + level + "</a></td>";
+    new_HTML += '<td>' + record["diff"] + " " + '<a style="text-decoration:none;" target="_blank" rel="noopener noreferrer" href="' + humen_url + '">';
+    if (document.getElementById('select-const').checked)
+        new_HTML += record["const"].toFixed(1) + "</a></td>";
+    else
+        new_HTML += level + "</a></td>";
     new_HTML += '<td style="text-align:center">' + record["genre"] + "</td>";
     new_HTML += '<td style="text-align:right">' + record["score"] + "</td>";
     new_HTML += '<td style="text-align:center">' + lamp + "</td>";
@@ -225,8 +252,15 @@ function setTweet() {
     tweet.appendChild(script);
 }
 
-async function OnButtonClick() {
+async function loadTable() {
     if (!(await callApi())) return;
+    if (!isValidConst()) return;
     setTable();
     saveCookie()
+}
+
+function switchConst() {
+    for (let name of ["lower-notconst-block", "upper-notconst-block", "lower-const-block", "upper-const-block"]) {
+        document.getElementById(name).classList.toggle("d-none");
+    }
 }
