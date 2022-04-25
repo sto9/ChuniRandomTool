@@ -11,7 +11,7 @@ async function loadAllMusicsData() {
 }
 
 const list_input_value = ['user_id', 'level_lower', 'level_upper', 'display_number'];
-const list_input_checked = ['ultima', 'genre_pa', 'genre_nico', 'genre_toho', 'genre_var', 'genre_iro', 'genre_geki', 'genre_ori', 'radio_AJC', 'radio_99AJ', 'radio_AJ', 'radio_all', 'exclude_unplayed'];
+const list_input_checked = ['ultima', 'genre_pa', 'genre_nico', 'genre_toho', 'genre_var', 'genre_iro', 'genre_geki', 'genre_ori', 'radio_AJC', 'radio_99AJ', 'radio_AJ', 'radio_SSS+', 'radio_SSS', 'radio_all', 'exclude_unplayed'];
 // クッキーを読み込み、設定を反映
 function loadCookie() {
     for (let target of list_input_value) {
@@ -87,6 +87,10 @@ function isValidRecord(record) {
         if (record["is_alljustice"] && record["score"] >= 1009900) return false;
     } else if (document.getElementById('radio_AJ').checked) {
         if (record["is_alljustice"]) return false;
+    } else if (document.getElementById('radio_SSS+').checked) {
+        if (record["score"] >= 1009000) return false;
+    } else if (document.getElementById('radio_SSS').checked) {
+        if (record["score"] >= 1007500) return false;
     }
     return true;
 }
@@ -110,7 +114,7 @@ function addTableAndTweet(record) {
     new_HTML += "</tr>";
     tbody.insertAdjacentHTML('beforeend', new_HTML);
 
-    tweet_sentence += "\n・" + record["title"] + " [" + record["diff"] + " " + level + "]";
+    tweet_sentence += "・" + record["title"] + " [" + record["diff"] + " " + level + "]\n";
 }
 
 function setAllRecords() {
@@ -149,14 +153,14 @@ function deleteTable() {
 
 function setTable() {
     deleteTable();
-    
+
     let th = '<tr><th scope="col" style="">曲名</th>';
     th += '<th scope="col" style="width:4.8em; min-width:4.8em">難易度</th>';
     th += '<th scope="col" style="width:6em; min-width:6em">ジャンル</th>';
     th += '<th scope="col" style="width:4.5em; min-width:4.5em">スコア</th>';
     th += '<th scope="col" style="width:2em; min-width:2em">AJ<br>FC</th></td>';
     thead.insertAdjacentHTML('beforeend', th);
-    tweet_sentence = "今日の課題曲はこれ！ #chunifil";
+    tweet_sentence = "今日の課題曲はこれ！ #chunifil\n";
 
     let display_number = document.getElementById('display_number').value;
     let displayed_count = 0;
