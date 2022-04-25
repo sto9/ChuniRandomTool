@@ -129,7 +129,7 @@ function addTableAndTweet(record) {
     else if (record["is_fullcombo"]) lamp = "FC"
     let humen_url = "https://www.sdvx.in/chunithm/sort/" + level + ".htm";
     let new_HTML = "<tr>";
-    new_HTML += '<td>' + record["title"] + "</td>";
+    new_HTML += '<td class="text-break">' + record["title"] + "</td>";
     new_HTML += '<td>' + record["diff"] + " " + '<a style="text-decoration:none;" target="_blank" rel="noopener noreferrer" href="' + humen_url + '">';
     if (document.getElementById('select-const').checked)
         new_HTML += record["const"].toFixed(1) + "</a></td>";
@@ -181,10 +181,10 @@ function deleteTable() {
 function setTable() {
     deleteTable();
 
-    let th = '<tr><th scope="col" style="">曲名</th>';
-    th += '<th scope="col" style="width:4.8em; min-width:4.8em">難易度</th>';
-    th += '<th scope="col" style="width:6em; min-width:6em">ジャンル</th>';
-    th += '<th scope="col" style="width:4.5em; min-width:4.5em">スコア</th>';
+    let th = '<tr><th scope="col">曲名</th>';
+    th += '<th scope="col" style="width:4.6em; min-width:4.6em">難易度</th>';
+    th += '<th scope="col" style="width:5.5em; min-width:5.5em">ジャンル</th>';
+    th += '<th scope="col" style="width:4.4em; min-width:4.4em">スコア</th>';
     th += '<th scope="col" style="width:2em; min-width:2em">AJ<br>FC</th></td>';
     thead.insertAdjacentHTML('beforeend', th);
     tweet_sentence = "今日の課題曲はこれ！ #chunifil\n";
