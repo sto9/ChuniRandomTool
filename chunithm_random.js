@@ -7,6 +7,7 @@ async function loadAllMusicsData() {
     const URL = "https://api.chunirec.net/2.0/music/showall.json?region=jp2&token=0cc61074c6f6ccf038b3c62be917be3ef317458be49bd3cd68c78a80b4d024b144db12e7f941a8c043f3ac8b4b0c610740e8960baf53f5469de414d6588fa6b5";
     const res = await fetch(URL);
     musics_all = await res.json();
+
 }
 
 const list_input_value = ['user_id', 'level_lower', 'level_upper', 'display_number'];
@@ -90,7 +91,9 @@ function isValidRecord(record) {
     return true;
 }
 
-function addTable(record) {
+let tweet_sentence;
+
+function addTableAndTweet(record) {
     let level = String(record["level"]);
     if (level.length > 2)
         level = level.slice(0, 2) + "+";
@@ -106,6 +109,8 @@ function addTable(record) {
     new_HTML += '<td style="text-align:center">' + lamp + "</td>";
     new_HTML += "</tr>";
     tbody.insertAdjacentHTML('beforeend', new_HTML);
+
+    tweet_sentence += "\n・" + record["title"] + " [" + record["diff"] + " " + level + "]";
 }
 
 function setAllRecords() {
@@ -131,17 +136,27 @@ function setAllRecords() {
     }
 }
 
-function setTable() {
+function deleteTable() {
     let thead = document.getElementById("thead");
     let tbody = document.getElementById("tbody");
     while (thead.firstChild) thead.removeChild(thead.firstChild);
     while (tbody.firstChild) tbody.removeChild(tbody.firstChild);
+    let tweet = document.getElementById("tweet");
+    while (tweet.firstChild) tweet.removeChild(tweet.firstChild);
+    let music_count_sentence = document.getElementById("music_count_sentence");
+    music_count_sentence.innerHTML = "";
+}
+
+function setTable() {
+    deleteTable();
+    
     let th = '<tr><th scope="col" style="">曲名</th>';
     th += '<th scope="col" style="width:4.8em; min-width:4.8em">難易度</th>';
     th += '<th scope="col" style="width:6em; min-width:6em">ジャンル</th>';
     th += '<th scope="col" style="width:4.5em; min-width:4.5em">スコア</th>';
     th += '<th scope="col" style="width:2em; min-width:2em">AJ<br>FC</th></td>';
     thead.insertAdjacentHTML('beforeend', th);
+    tweet_sentence = "今日の課題曲はこれ！ #chunifil";
 
     let display_number = document.getElementById('display_number').value;
     let displayed_count = 0;
@@ -159,7 +174,7 @@ function setTable() {
             valid_music_count++;
             if (displayed_count == display_number) continue;
             displayed_count++;
-            addTable(records[idx[i]]);
+            addTableAndTweet(records[idx[i]]);
         }
     } else {
         setAllRecords();
@@ -174,12 +189,36 @@ function setTable() {
             valid_music_count++;
             if (displayed_count == display_number) continue;
             displayed_count++;
-            addTable(records_all[idx[i]]);
+            addTableAndTweet(records_all[idx[i]]);
         }
     }
     let music_count_sentence = document.getElementById("music_count_sentence");
     music_count_sentence.innerHTML = "<b>" + valid_music_count + "</b> 曲中 ";
     music_count_sentence.innerHTML += displayed_count + " 曲を表示"
+
+    if (1 <= displayed_count && displayed_count <= 5) {
+        setTweet();
+    } else {
+        let tweet = document.getElementById("tweet");
+        while (tweet.firstChild) tweet.removeChild(tweet.firstChild);
+    }
+}
+
+function setTweet() {
+    let tweet = document.getElementById("tweet");
+    while (tweet.firstChild) tweet.removeChild(tweet.firstChild);
+    let a = document.createElement("a");
+    a.setAttribute("href", "https://twitter.com/share?ref_src=twsrc%5Etfw");
+    a.setAttribute("class", "twitter-share-button");
+    a.setAttribute("data-show-count", "false");
+    a.setAttribute("data-text", tweet_sentence);
+    a.setAttribute("data-url", "https://sto9.github.io/ChuniRandomTool/chunithm_random.html");
+    tweet.appendChild(a);
+    let script = document.createElement("script");
+    script.async = "true";
+    script.src = "https://platform.twitter.com/widgets.js";
+    script.charset = "utf-8";
+    tweet.appendChild(script);
 }
 
 async function OnButtonClick() {
@@ -187,5 +226,3 @@ async function OnButtonClick() {
     setTable();
     saveCookie()
 }
-
-// 譜面保管所からデータを検索

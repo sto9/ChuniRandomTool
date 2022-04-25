@@ -35,6 +35,26 @@ header {
   z-index: 11;
 }
 
+.header-help:link {
+  text-decoration: none;
+  color: white;
+}
+
+.header-help:visited {
+  text-decoration: none;
+  color: white;
+}
+
+.header-help:active {
+  text-decoration: none;
+  color: white;
+}
+
+.header-help:hover {
+  text-decoration: none;
+  color: white;
+}
+
 .footer {
   padding-left: 1.2rem;
   padding-right: 1.2rem;
