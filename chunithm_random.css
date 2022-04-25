@@ -30,10 +30,29 @@ header {
 }
 
 .footer {
-  padding-left: 60px;
-  padding-right: 60px;
+  padding-left: auto;
+  padding-right: auto;
 }
 
 body {
   padding-top: 80px;
+}
+
+.table {
+  width: 100%;
+  font-size: 10px;
+}
+
+#thead th,
+#tbody td {
+  padding: .45em .3em;
+}
+
+#thead th {
+  text-align: center;
+}
+
+.text-break {
+  word-wrap: break-word;
+  word-break: break-word;
 }

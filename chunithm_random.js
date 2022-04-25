@@ -9,14 +9,16 @@ async function loadAllMusicsData() {
     musics_all = await res.json();
 }
 
+const list_input_value = ['user_id', 'level_lower', 'level_upper', 'display_number'];
+const list_input_checked = ['ultima', 'genre_pa', 'genre_nico', 'genre_toho', 'genre_var', 'genre_iro', 'genre_geki', 'genre_ori', 'radio_AJC', 'radio_99AJ', 'radio_AJ', 'radio_all', 'exclude_unplayed'];
 // クッキーを読み込み、設定を反映
 function loadCookie() {
-    for (let target of ['user_id', 'level_lower', 'level_upper', 'display_number']) {
+    for (let target of list_input_value) {
         let cookie;
         if (cookie = Cookies.get(target))
             document.getElementById(target).value = cookie;
     }
-    for (let target of ['ultima', 'genre_pa', 'genre_nico', 'genre_toho', 'genre_var', 'genre_iro', 'genre_geki', 'genre_ori', 'radio_AJC', 'radio_99AJ', 'radio_AJ', 'radio_all', 'exclude_unplayed']) {
+    for (let target of list_input_checked) {
         let cookie;
         if (cookie = Cookies.get(target))
             document.getElementById(target).checked = (cookie === 'on');
@@ -24,10 +26,10 @@ function loadCookie() {
 }
 // 設定を保存
 function saveCookie() {
-    for (let target of ['user_id', 'level_lower', 'level_upper', 'display_number']) {
+    for (let target of list_input_value) {
         Cookies.set(target, document.getElementById(target).value, { expires: 60 });
     }
-    for (let target of ['ultima', 'genre_pa', 'genre_nico', 'genre_toho', 'genre_var', 'genre_iro', 'genre_geki', 'genre_ori', 'radio_AJC', 'radio_99AJ', 'radio_AJ', 'radio_all', 'exclude_unplayed']) {
+    for (let target of list_input_checked) {
         Cookies.set(target, (document.getElementById(target).checked ? 'on' : 'off'), { expires: 60 });
     }
 }
@@ -97,13 +99,13 @@ function addTable(record) {
     else if (record["is_fullcombo"]) lamp = "FC"
     let humen_url = "https://www.sdvx.in/chunithm/sort/" + level + ".htm";
     let new_HTML = "<tr>";
-    new_HTML += "<td>" + record["title"] + "</td>";
-    new_HTML += "<td>" + record["diff"] + " " + "<a style=\"text-decoration:none;\" href=\"" + humen_url + "\"> " + level + "</a></td>";
-    new_HTML += "<td>" + record["genre"] + "</td>";
-    new_HTML += "<td>" + record["score"] + "</td>";
-    new_HTML += "<td>" + lamp + "</td>";
+    new_HTML += '<td>' + record["title"] + "</td>";
+    new_HTML += '<td>' + record["diff"] + " " + "<a style=\"text-decoration:none;\" href=\"" + humen_url + "\"> " + level + "</a></td>";
+    new_HTML += '<td style="text-align:center">' + record["genre"] + "</td>";
+    new_HTML += '<td style="text-align:right">' + record["score"] + "</td>";
+    new_HTML += '<td style="text-align:center">' + lamp + "</td>";
     new_HTML += "</tr>";
-    table.insertAdjacentHTML('beforeend', new_HTML);
+    tbody.insertAdjacentHTML('beforeend', new_HTML);
 }
 
 function setAllRecords() {
@@ -130,14 +132,16 @@ function setAllRecords() {
 }
 
 function setTable() {
-    let table = document.getElementById("table");
-    while (table.firstChild) table.removeChild(table.firstChild);
-    let th = '<th scope="col" style="width: 25%">曲名</th>';
-    th += '<th scope="col" style="width: 15%">難易度</th>';
-    th += '<th scope="col" style="width: 15%">ジャンル</th>';
-    th += '<th scope="col" style="width: 15%">スコア</th>';
-    th += '<th scope="col" style="width: 5%">ランプ</th>';
-    table.insertAdjacentHTML('beforeend', th);
+    let thead = document.getElementById("thead");
+    let tbody = document.getElementById("tbody");
+    while (thead.firstChild) thead.removeChild(thead.firstChild);
+    while (tbody.firstChild) tbody.removeChild(tbody.firstChild);
+    let th = '<tr><th scope="col" style="">曲名</th>';
+    th += '<th scope="col" style="width:4.8em; min-width:4.8em">難易度</th>';
+    th += '<th scope="col" style="width:6em; min-width:6em">ジャンル</th>';
+    th += '<th scope="col" style="width:4.5em; min-width:4.5em">スコア</th>';
+    th += '<th scope="col" style="width:2em; min-width:2em">AJ<br>FC</th></td>';
+    thead.insertAdjacentHTML('beforeend', th);
 
     let display_number = document.getElementById('display_number').value;
     let displayed_count = 0;
