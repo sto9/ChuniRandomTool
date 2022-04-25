@@ -29,6 +29,12 @@ header {
   z-index: 11;
 }
 
+.header-help {
+  line-height: 50px;
+  vertical-align: auto;
+  z-index: 11;
+}
+
 .footer {
   padding-left: 1.2rem;
   padding-right: 1.2rem;
@@ -59,4 +65,8 @@ body {
 
 .accordion-body {
   padding: 1rem;
+}
+
+#music_count_sentence {
+  margin-bottom: 0;
 }

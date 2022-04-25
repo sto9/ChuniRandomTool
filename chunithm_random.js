@@ -177,9 +177,9 @@ function setTable() {
             addTable(records_all[idx[i]]);
         }
     }
-    let music_count_sentense = document.getElementById("music_count_sentense");
-    music_count_sentense.innerHTML = "<b>" + valid_music_count + "</b> 曲中 ";
-    music_count_sentense.innerHTML += displayed_count + " 曲を表示"
+    let music_count_sentence = document.getElementById("music_count_sentence");
+    music_count_sentence.innerHTML = "<b>" + valid_music_count + "</b> 曲中 ";
+    music_count_sentence.innerHTML += displayed_count + " 曲を表示"
 }
 
 async function OnButtonClick() {
