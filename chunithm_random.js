@@ -184,7 +184,7 @@ function setTable() {
     deleteTable();
 
     let th = '<tr><th scope="col">曲名</th>';
-    th += '<th scope="col" style="width:4.6em; min-width:4.6em">難易度</th>';
+    th += '<th scope="col" style="width:4.9em; min-width:4.9em">難易度</th>';
     th += '<th scope="col" style="width:5.5em; min-width:5.5em">ジャンル</th>';
     th += '<th scope="col" style="width:4.4em; min-width:4.4em">スコア</th>';
     th += '<th scope="col" style="width:2em; min-width:2em">AJ<br>FC</th></td>';
