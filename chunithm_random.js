@@ -67,7 +67,7 @@ function isValidConst() {
     if (!document.getElementById('select-const').checked) return true;
     let lower = document.getElementById('level_lower_const').value;
     let upper = document.getElementById('level_upper_const').value;
-    if (lower !== "" && upper !== "" && !isNaN(lower) && !isNaN(upper)){
+    if (lower !== "" && upper !== "" && !isNaN(lower) && !isNaN(upper)) {
         document.getElementById('const_error').innerHTML = "";
         return true;
     }
@@ -91,15 +91,17 @@ function isValidRecord(record) {
     let ultima = document.getElementById('ultima').checked;
     if (!(record["diff"] === "MAS" || (record["diff"] === "ULT" && ultima))) return false;
     // レベル
-    let lower, upper;
+    let lower, upper, level_target;
     if (document.getElementById('select-const').checked) {
         lower = document.getElementById('level_lower_const').value;
         upper = document.getElementById('level_upper_const').value;
+        level_target = record["const"];
     } else {
         lower = document.getElementById('level_lower').value;
         upper = document.getElementById('level_upper').value;
+        level_target = record["level"];
     }
-    if (record["level"] < lower || record["level"] > upper) return false;
+    if (level_target < lower || level_target > upper) return false;
     // ジャンル
     genre_id = genre_to_id(record["genre"]);
     if (genre_id === "" || !document.getElementById(genre_id).checked) return false;
