@@ -141,7 +141,7 @@ function addTableAndTweet(record) {
     new_HTML += "</tr>";
     tbody.insertAdjacentHTML('beforeend', new_HTML);
 
-    tweet_sentence += "\n・" + record["title"] + " [" + record["diff"] + " " + level + "]";
+    tweet_sentence += "・" + record["title"] + " [" + record["diff"] + " " + level + "]\n";
 }
 
 function setAllRecords() {
@@ -187,7 +187,7 @@ function setTable() {
     th += '<th scope="col" style="width:4.4em; min-width:4.4em">スコア</th>';
     th += '<th scope="col" style="width:2em; min-width:2em">AJ<br>FC</th></td>';
     thead.insertAdjacentHTML('beforeend', th);
-    tweet_sentence = "今日の課題曲はこれ！ #chunifil";
+    tweet_sentence = "今日の課題曲はこれ！ #chunifil\n";
 
     let display_number = document.getElementById('display_number').value;
     let displayed_count = 0;
