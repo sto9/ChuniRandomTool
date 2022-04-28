@@ -9,8 +9,22 @@ async function loadAllMusicsData() {
     musics_all = await res.json();
 }
 
-const list_input_value = ['user_id', 'level_lower', 'level_upper', 'level_lower_const', 'level_upper_const', 'display_number'];
-const list_input_checked = ['select-const', 'ultima', 'genre_pa', 'genre_nico', 'genre_toho', 'genre_var', 'genre_iro', 'genre_geki', 'genre_ori', 'radio_AJC', 'radio_99AJ', 'radio_AJ', 'radio_SSS+', 'radio_SSS', 'radio_all', 'exclude_unplayed'];
+const list_input_value = ['user_id', 'level_lower', 'level_upper', 'level_lower_const', 'level_upper_const', 'unachieved', 'achieved', 'score_lower', 'score_upper', 'display_number'];
+const list_input_checked = ['select-const', 'ultima', 'genre_pa', 'genre_nico', 'genre_toho', 'genre_var', 'genre_iro', 'genre_geki', 'genre_ori', 'exclude_unplayed'];
+
+// 旧バージョンの Cookie を新しくする
+function renewCookie() {
+    const achieve_list = ["AJC", "99AJ", "AJ", "SSS+", "SSS", "all"];
+    for (let achieve of achieve_list) {
+        let cookie;
+        if (cookie = Cookies.get("radio_" + achieve)) {
+            Cookies.remove("radio_" + achieve);
+            if (cookie === "on")
+                Cookies.set("unachieved", "notdone_" + achieve, { expires: 60 });
+        }
+    }
+}
+
 // クッキーを読み込み、設定を反映
 function loadCookie() {
     for (let target of list_input_value) {
@@ -39,6 +53,21 @@ function saveCookie() {
         Cookies.set(target, (document.getElementById(target).checked ? 'on' : 'off'), { expires: 60 });
     }
 }
+// 設定を初期化
+function initOption() {
+    for (let target of list_input_value) {
+        if (target === "user_id") continue;
+        Cookies.remove(target);
+    }
+    for (let target of list_input_checked) {
+        Cookies.remove(target);
+    }
+    location.reload();
+}
+function initOptionConfirm() {
+    if (window.confirm('初期設定に戻しますか？'))
+        initOption();
+}
 
 // 前と同じ ID なら呼ばない
 // 成功したかどうかを返す
@@ -63,16 +92,31 @@ async function callApi() {
     return true;
 }
 
-function isValidConst() {
-    if (!document.getElementById('select-const').checked) return true;
-    let lower = document.getElementById('level_lower_const').value;
-    let upper = document.getElementById('level_upper_const').value;
-    if (lower !== "" && upper !== "" && !isNaN(lower) && !isNaN(upper)) {
-        document.getElementById('const_error').innerHTML = "";
-        return true;
+// 入力が数値かチェック
+function isValidInputNumber() {
+    let valid = true;
+    // 譜面定数
+    if (document.getElementById('select-const').checked) {
+        let lower = document.getElementById('level_lower_const').value;
+        let upper = document.getElementById('level_upper_const').value;
+        if (lower !== "" && upper !== "" && !isNaN(lower) && !isNaN(upper)) {
+            document.getElementById('const_error').innerHTML = "";
+        } else {
+            document.getElementById('const_error').innerHTML = "<b>数値を入力してください。</b>";
+            valid = false;
+        }
     }
-    document.getElementById('const_error').innerHTML = "<b>数値を入力してください。</b>";
-    return false;
+    // スコア
+    let lower = document.getElementById('score_lower').value;
+    let upper = document.getElementById('score_upper').value;
+    if ((lower === "" || !isNaN(lower)) && (upper === "" || !isNaN(upper))) {
+        document.getElementById('score_error').innerHTML = "";
+    } else {
+        document.getElementById('score_error').innerHTML = "<b>数値を入力してください。</b>";
+        valid = false;
+    }
+
+    return valid;
 }
 
 function genre_to_id(genre) {
@@ -87,7 +131,7 @@ function genre_to_id(genre) {
 }
 
 function isValidRecord(record) {
-    // 難易度
+    // MASTER, ULTIMA
     let ultima = document.getElementById('ultima').checked;
     if (!(record["diff"] === "MAS" || (record["diff"] === "ULT" && ultima))) return false;
     // レベル
@@ -103,20 +147,42 @@ function isValidRecord(record) {
     }
     if (level_target < lower || level_target > upper) return false;
     // ジャンル
-    genre_id = genre_to_id(record["genre"]);
+    let genre_id = genre_to_id(record["genre"]);
     if (genre_id === "" || !document.getElementById(genre_id).checked) return false;
-    // 目標
-    if (document.getElementById('radio_AJC').checked) {
-        if (record["score"] == "1010000") return false;
-    } else if (document.getElementById('radio_99AJ').checked) {
-        if (record["is_alljustice"] && record["score"] >= 1009900) return false;
-    } else if (document.getElementById('radio_AJ').checked) {
-        if (record["is_alljustice"]) return false;
-    } else if (document.getElementById('radio_SSS+').checked) {
-        if (record["score"] >= 1009000) return false;
-    } else if (document.getElementById('radio_SSS').checked) {
-        if (record["score"] >= 1007500) return false;
+    // 未達成・達成
+    const achieved_and_unachieved = [document.getElementById('achieved').value, document.getElementById('unachieved').value];
+    const prefix = ["done_", "notdone_"];
+    for (let au = 0; au < 2; au++) {
+        let val = achieved_and_unachieved[au];
+        let NG;
+        if (val === prefix[au] + "AJC") {
+            NG = (record["score"] == "1010000");
+        } else if (val === prefix[au] + "99AJ") {
+            NG = (record["is_alljustice"] && record["score"] >= 1009900);
+        } else if (val === prefix[au] + "AJ") {
+            NG = (record["is_alljustice"]);
+        } else if (val === prefix[au] + "SSS+") {
+            NG = (record["score"] >= 1009000);
+        } else if (val === prefix[au] + "SSS") {
+            NG = (record["score"] >= 1007500);
+        } else if (val === prefix[au] + "SS+") {
+            NG = (record["score"] >= 1005000);
+        } else if (val === prefix[au] + "SS") {
+            NG = (record["score"] >= 1000000);
+        } else if (val === prefix[au] + "all") {
+            continue;
+        } else {
+            console.assert(false);
+        }
+        if (au === 0) NG = !NG;
+        if (NG) return false;
     }
+    // スコア指定
+    let score_lower = document.getElementById('score_lower').value;
+    if (score_lower !== "" && record["score"] < score_lower) return false;
+    let score_upper = document.getElementById('score_upper').value;
+    if (score_upper !== "" && record["score"] > score_upper) return false;
+
     return true;
 }
 
@@ -256,7 +322,7 @@ function setTweet() {
 
 async function loadTable() {
     if (!(await callApi())) return;
-    if (!isValidConst()) return;
+    if (!isValidInputNumber()) return;
     setTable();
     saveCookie()
 }

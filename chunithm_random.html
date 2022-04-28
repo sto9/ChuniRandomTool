@@ -7,18 +7,24 @@
 
     <title>chunifil</title>
 
-    <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <link href="./chunithm_random.css" rel="stylesheet" type="text/css">
 
     <script src="./chunithm_random.js"></script>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/js-cookie@2/src/js.cookie.min.js"></script>
     <script src="https://html2canvas.hertzen.com/dist/html2canvas.js"></script>
 
     <script>loadAllMusicsData();</script>
+    <script>
+        $(function () {
+            $('[data-toggle="tooltip"]').tooltip()
+        })
+    </script>
 </head>
 
 <body>
@@ -108,12 +114,12 @@
 
 
                             <div id="lower-const-block" class="form-group col-auto d-none" style="display:table-cell">
-                                <label for="level_lower-const"> 以上</label>
+                                <label for="level_lower_const"> 以上</label>
                                 <input type="text" class="form-control" id="level_lower_const" minlength="1"
                                     maxlength="5" value="10.0" placeholder="例: 10.0">
                             </div>
                             <div id="upper-const-block" class="form-group col-auto d-none" style="display:table-cell">
-                                <label for="level_upper-const"> 以下</label>
+                                <label for="level_upper_const"> 以下</label>
                                 <input type="text" class="form-control" id="level_upper_const" minlength="1"
                                     maxlength="5" value="15.4" placeholder="例: 15.4">
                             </div>
@@ -127,8 +133,8 @@
 
                         </div>
                         <div class="row border-bottom" style="padding-bottom: 0;">
-                            <div class="col-auto h-auto">
-                                <p id="const_error" style="color:red;"></p>
+                            <div class="col-auto">
+                                <div id="const_error" style="color:red;"></div>
                             </div>
                         </div>
 
@@ -139,6 +145,7 @@
                                 <label class="form-check-label child" for="ultima">ULTIMA を含む </label>
                             </div>
                         </div>
+
                         <!-- ジャンル指定 -->
                         <div class="row border-bottom" style="padding-left:12px;">
                             <div class="form-check form-check-inline col-auto">
@@ -171,39 +178,88 @@
                             </div>
                         </div>
 
-                        <!-- 目標 -->
-                        <div class="row border-bottom" style="padding-left:12px;">
-                            <div class="form-check form-check-inline col-auto">
-                                <input class="form-check-input" type="radio" name="achievement" id="radio_AJC" checked>
-                                <label class="form-check-label" for="radio_AJC">未理論値</label>
+                        <!-- 達成済・未達成 -->
+                        <div class="row border-bottom">
+                            <div id="unachieved-block" class="form-group col-auto">
+                                <label for="unachieved">未達成 </label>
+                                <select id="unachieved" class="form-select">
+                                    <option value="notdone_all">指定なし</option>
+                                    <option value="notdone_AJC" selected>未理論値</option>
+                                    <option value="notdone_99AJ">未99AJ</option>
+                                    <option value="notdone_AJ">未AJ</option>
+                                    <option value="notdone_SSS+">未SSS+</option>
+                                    <option value="notdone_SSS">未SSS</option>
+                                    <option value="notdone_SS+">未SS+</option>
+                                    <option value="notdone_SS">未SS</option>
+                                </select>
                             </div>
-                            <div class="form-check form-check-inline col-auto">
-                                <input class="form-check-input" type="radio" name="achievement" id="radio_99AJ">
-                                <label class="form-check-label" for="radio_99AJ">未99AJ</label>
+                            <div id="achieved-block" class="form-group col-auto">
+                                <label for="achieved">達成済</label>
+                                <select id="achieved" class="form-select">
+                                    <option value="done_all" selected>指定なし</option>
+                                    <option value="done_AJC">既理論値</option>
+                                    <option value="done_99AJ">既99AJ</option>
+                                    <option value="done_AJ">既AJ</option>
+                                    <option value="done_SSS+">既SSS+</option>
+                                    <option value="done_SSS">既SSS</option>
+                                    <option value="done_SS+">既SS+</option>
+                                    <option value="done_SS">既SS</option>
+                                </select>
                             </div>
-                            <div class="form-check form-check-inline col-auto">
-                                <input class="form-check-input" type="radio" name="achievement" id="radio_AJ">
-                                <label class="form-check-label" for="radio_AJ">未AJ</label>
+                        </div>
+
+                        <!-- スコア指定 -->
+                        <div class="row" style="margin-bottom:0">
+                            <div class="col-auto">
+                                <span style="vertical-align:middle;">スコア指定（任意）</span>
+                                <svg id="score-help" style="vertical-align:middle;" xmlns="http://www.w3.org/2000/svg"
+                                    width="16" height="16" fill="currentColor" class="bi bi-question-circle-fill"
+                                    viewBox="0 0 16 16">
+                                    <path
+                                        d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zM5.496 6.033h.825c.138 0 .248-.113.266-.25.09-.656.54-1.134 1.342-1.134.686 0 1.314.343 1.314 1.168 0 .635-.374.927-.965 1.371-.673.489-1.206 1.06-1.168 1.987l.003.217a.25.25 0 0 0 .25.246h.811a.25.25 0 0 0 .25-.25v-.105c0-.718.273-.927 1.01-1.486.609-.463 1.244-.977 1.244-2.056 0-1.511-1.276-2.241-2.673-2.241-1.267 0-2.655.59-2.75 2.286a.237.237 0 0 0 .241.247zm2.325 6.443c.61 0 1.029-.394 1.029-.927 0-.552-.42-.94-1.029-.94-.584 0-1.009.388-1.009.94 0 .533.425.927 1.01.927z" />
+                                </svg>
                             </div>
-                            <div class="form-check form-check-inline col-auto">
-                                <input class="form-check-input" type="radio" name="achievement" id="radio_SSS+">
-                                <label class="form-check-label" for="radio_SSS+">未SSS+</label>
+                            <script>
+                                $(function () {
+                                    $('#score-help').popover({
+                                        title: 'スコア指定',
+                                        content: '上のオプションで足りないときはこちら。<br>空欄=指定なし',
+                                        placement: 'top',
+                                        trigger: 'hover',
+                                        html: true
+                                    });
+                                });
+                            </script>
+                        </div>
+                        <div class="row" style="margin-bottom:0">
+                            <div id="score-lower-block" class="form-group col-auto">
+                                <label for="score_lower"> 以上</label>
+                                <input type="text" class="form-control" id="score_lower" minlength="1" maxlength="8">
                             </div>
-                            <div class="form-check form-check-inline col-auto">
-                                <input class="form-check-input" type="radio" name="achievement" id="radio_SSS">
-                                <label class="form-check-label" for="radio_SSS">未SSS</label>
+                            <div id="score-upper-block" class="form-group col-auto">
+                                <label for="score_lower"> 以下</label>
+                                <input type="text" class="form-control" id="score_upper" minlength="1" maxlength="8">
                             </div>
-                            <div class="form-check form-check-inline col-auto">
-                                <input class="form-check-input" type="radio" name="achievement" id="radio_all">
-                                <label class="form-check-label" for="radio_all">全て</label>
+                        </div>
+                        <div class="row border-bottom" style="padding-bottom: 0;">
+                            <div class="col-auto">
+                                <div id="score_error" style="color:red;"></div>
                             </div>
                         </div>
 
                         <!-- 除外設定 -->
-                        <div class="row" style="padding-left:12px; margin-bottom:0;">
+                        <div class="row border-bottom" style="padding-left:12px;">
                             <div class="form-check form-check-inline col-auto">
                                 <input class="form-check-input" type="checkbox" id="exclude_unplayed">
                                 <label class="form-check-label" for="exclude_unplayed">未プレイ除外</label>
+                            </div>
+                        </div>
+
+                        <!-- 設定初期化 -->
+                        <div class="row">
+                            <div class="col-auto">
+                                <input type="button" class="btn btn-secondary" value="初期設定に戻す"
+                                    onclick="initOptionConfirm();" />
                             </div>
                         </div>
 
@@ -264,7 +320,7 @@
 
     </footer>
 
-    <script>loadCookie();</script>
+    <script>renewCookie(); loadCookie();</script>
 </body>
 
 </html>
