@@ -304,6 +304,7 @@ function setTable() {
 }
 
 function setTweet() {
+    console.log("setTweet invoked");
     let tweet = document.getElementById("tweet");
     while (tweet.firstChild) tweet.removeChild(tweet.firstChild);
     let a = document.createElement("a");
